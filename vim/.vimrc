@@ -9,7 +9,7 @@ set smartcase           " be smart about cases
 " => Tabs and indenting
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set expandtab           " use spaces instead of tabs
-set smarttab            " Be smart when using tabs ;)
+"set smarttab            " Be smart when using tabs ;)
 set tabstop=2           " spaces to insert when using <TAB>
 set shiftwidth=2        " space character for indentation
 
