@@ -1,3 +1,20 @@
+set nocompatible
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Plugin Manager
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Autoinstall vim-plug
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+" Plug config
+call plug#begin('~/.vim/bundle')
+Plug 'morhetz/gruvbox'
+call plug#end()
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Moving around and searching
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -5,17 +22,21 @@ set hlsearch            " highlight matches
 set ignorecase          " ignore case whe using a search pattern
 set smartcase           " be smart about cases
 
+" Press F4 to toggle highlighting on/off, and show current value.
+noremap <F4> :set hlsearch! hlsearch?<CR>
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Tabs and indenting
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set shiftwidth=2        " space character for indentation
+set tabstop=2           " spaces to insert when using <TAB>
 set expandtab           " use spaces instead of tabs
 "set smarttab            " Be smart when using tabs ;)
-set tabstop=2           " spaces to insert when using <TAB>
-set shiftwidth=2        " space character for indentation
 
-set autoindent
+"set autoindent
 set smartindent 
 set wrap                " Wrap lines
+set linebreak           " Wrap at word boundaries, not in the middle of words
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => UI Config
@@ -32,6 +53,16 @@ set showmatch           " highlight matching brackets
 set noeb novb t_vb=     " No annoying sound on error
 
 filetype indent on      " load filetype-sepecific indent files
+
+set showcmd             " Show partially-typed commands in the bottom right
+
+" Colorscheme
+if &term == "screen"
+  set t_Co=256
+endif
+set background=dark
+
+colorscheme gruvbox
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Folding
@@ -80,40 +111,32 @@ map <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
 map <leader>pp :setlocal paste!<cr>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Plugin Manager
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Autoinstall vim-plug
-if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-endif
-
-" Plug config
-call plug#begin('~/.vim/bundle')
-Plug 'morhetz/gruvbox'
-call plug#end()
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Backups
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "set noswapfile
 "set nobackup
+"
+" Persist undo state across sessions
+" https://www.reddit.com/r/vim/comments/2ib9au/why_does_exiting_vim_make_the_next_prompt_appear/cl0zb7m/
+let s:vim_cache = expand("$HOME/.vim/undo")
+if filewritable(s:vim_cache) == 0 && exists("*mkdir")
+  call mkdir(s:vim_cache, "p", 0700)
+  endif
+  set undofile
+  let &undodir=s:vim_cache
+  set undolevels=1000
+  set undoreload=10000
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Various
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-if &term == "screen"
-  set t_Co=256
-endif
-set background=dark
-
-colorscheme gruvbox
-
 set hidden             " A buffer becomes hidden when it is abandoned
 set encoding=utf8      " Set utf8 as standard encoding and es the standard language
 set ffs=unix,dos,mac   " Use Unix as the standard file type
 set backspace=indent,eol,start   " make the backspace work like most programs
+
+" Make Vim respond faster to some stuff, e.g. vim-gitgutter load delay
+set updatetime=250
 
 " Return to last edit position when opening files (You want this!)
 autocmd BufReadPost *
