@@ -61,7 +61,7 @@ set showcmd             " Show partially-typed commands in the bottom right
 if &term == "screen"
   set t_Co=256
 endif
-set syntax on
+syntax on
 set background=dark
 colorscheme gruvbox
 
