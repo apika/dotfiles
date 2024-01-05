@@ -4,15 +4,14 @@ set nocompatible
 " => Plugin Manager
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Autoinstall vim-plug
-if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
+if empty(glob(data_dir . '/autoload/plug.vim'))
+  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
 " Plug config
 call plug#begin('~/.vim/bundle')
-Plug 'morhetz/gruvbox'
 Plug 'vietjtnguyen/toy-blocks'
 call plug#end()
 
@@ -58,12 +57,12 @@ filetype indent on      " load filetype-sepecific indent files
 set showcmd             " Show partially-typed commands in the bottom right
 
 " Colorscheme
-if &term == "screen"
-  set t_Co=256
-endif
-syntax on
-set background=dark
-colorscheme gruvbox
+"if &term == "screen"
+"  set t_Co=256
+"endif
+"syntax on
+"set background=dark
+"colorscheme gruvbox
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Folding
